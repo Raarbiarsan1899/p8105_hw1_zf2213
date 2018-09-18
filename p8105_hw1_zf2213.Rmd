@@ -3,10 +3,7 @@ title: "R markdown"
 author: "Zanis Fang"
 date: "9/17/2018"
 output:
-  html_document:
-    toc: true
-    toc_float: true
-    code_folding: show
+  github_document: default
 ---
 
 ```{r setup, include=FALSE}
@@ -27,43 +24,43 @@ set.seed(1)
 #create the data frame
 df_diff_types <- data.frame(
 	
-	#assign values
+  #assign values
   vector_numeric   <- runif(10, 0, 5),
   vector_logic     <- vector_numeric > 2,
-  vector_character <- character(length = 10),
-  vector_factor    <- factor(x = character(length = 10), levels = 10)
+  vector_character <- c("z", "f", "2", "2", "1", "3", "f", "a", "n", "g"),
+  vector_factor    <- factor(vector_character)
   
 )
 
 #rename the columns
-colnames(df_diff_types) <- c("numeric", "logic", "character", "factor")
+colnames(df_diff_types) <- c("vector_numeric", "vector_logic", "vector_character", "vector_factor")
 
 ```
 
-Despite this default "mean" function can take all of these four kinds of objects as its "x" argument, taking means only works for numeric and logic vectors, but for character and factor vectors it only returns NA.
+Despite this default "mean" function can take all of these four kinds of objects as its "x" argument, taking means only works for numeric and logic vectors but doesn't work for character and factor vectors, which gives "returning NA warning".
 
-```{r coercing, eval = FALSE}
+```{r conversion_one_step, eval = FALSE}
 
 #apply as.numeric function to logic, character, and factor variables
 lapply(df_diff_types[2:4], FUN = as.numeric)
 
 ```
 
-Coercing the three vectors into numeric data type.
+Converting the three vectors directly into numeric data type works for logic and factor vectors, but only works for the "numeric part" of the character vectors whose elements can be coerced into numeric variables, while the others will become NA.
 
-
-
-```{r conversion, eval = FALSE}
+```{r conversion_two_step, eval = FALSE}
 
 #convert charactor vector to factor then to numeric vectors
 char_to_fact <- as.factor(vector_character)
-char_to_num  <- as.numeric(char_to_fact)
+fact_to_num  <- as.numeric(char_to_fact)
 
 #convert factor vector to character then to numeric vectors
 fact_to_char <- as.character(vector_factor)
-fact_to_num  <- as.numeric(fact_to_char)
+char_to_num  <- as.numeric(fact_to_char)
 
 ```
+
+However, in most cases, since a character vector can be converted to a factor vector, and factor vector can be converted to a numeric vector, this character-factor-numeric conversion will work. But it does not necessarily work if we reverse the first conversion step since character to numeric conversion does not always work.
 
 
 ## Problem 2
@@ -88,7 +85,7 @@ df_plot <- data.frame(
 )
 
 #rename the columns of the dataframe
-colnames(df_plot) <- c("x", "y", "logic", "numeric", "factor")
+colnames(df_plot) <- c("x", "y", "plot_logic", "plot_numeric", "plot_factor")
 
 ```
 
@@ -100,10 +97,10 @@ The size of the dataframe is `r dim(df_plot)`, the mean and median of x is `r me
 scatter_plot <- ggplot(df_plot, aes(x = x, y = y))
 
 #scatter plots using different coloring strategies
-scatter_plot + geom_point(aes(color = logic))
-scatter_plot + geom_point(aes(color = numeric))
-scatter_plot + geom_point(aes(color = factor))
+scatter_plot + geom_point(aes(color = plot_logic))
+scatter_plot + geom_point(aes(color = plot_numeric))
+scatter_plot + geom_point(aes(color = plot_factor))
 
 ```
 
-For scatterplot coloring points using logic or factor variables, the color scales are discrete because these two types of variable assuming the values in the vectors are exhaustive. But for numeric variable it assuming the values can be any real number, so the color scale is continuous.
+For scatterplot who colors points using logic or factor variables, the color scales are discrete because these two types of variable assuming the values in the vectors are exhaustive. But for numeric variable it assumes that the values can be any real number, so the color scale is continuous.
