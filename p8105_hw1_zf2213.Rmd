@@ -108,7 +108,7 @@ scatter_plot <- ggplot(df_plot, aes(x = x, y = y, color = plot_logic))
 scatter_plot + geom_point(aes(color = plot_logic))
 
 #save the first figure
-ggsave(filename = "20180918_hw1_pr2_scatterplot", plot = last_plot(), device = "png")
+ggsave(filename = "20180918_hw1_pr2_scatterplot.png", plot = last_plot(), device = "png")
 
 #color scatter plot according to numeric vector
 scatter_plot + geom_point(aes(color = plot_numeric))
