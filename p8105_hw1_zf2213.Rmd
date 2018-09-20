@@ -34,6 +34,9 @@ df_diff_types <- tibble(
   
 )
 
+sapply(df_diff_types, FUN = mean)
+
+
 ```
 
 * Despite this default "mean" function can take all of these four kinds of objects as its "x" argument, taking means only works for numeric and logic vectors but doesn't work for character and factor vectors, which gives "returning NA warning".
@@ -44,7 +47,7 @@ df_diff_types <- tibble(
 ```{r conversion_one_step, eval = FALSE}
 
 #apply as.numeric function to logic, character, and factor variables
-lapply(df_diff_types[2:4], FUN = as.numeric)
+sapply(df_diff_types[2:4], FUN = as.numeric)
 
 ```
 
